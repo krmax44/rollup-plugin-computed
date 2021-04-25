@@ -1,22 +1,43 @@
-# package-name
+# rollup-plugin-computed
 
-[![CI status](https://img.shields.io/github/workflow/status/krmax44/package-name/build/main)](https://github.com/krmax44/package-name/actions)
-[![Code coverage](https://img.shields.io/codecov/c/github/krmax44/package-name?token=token)](https://codecov.io/gh/krmax44/package-name)
-[![bundle size](https://img.shields.io/bundlephobia/minzip/package-name)](https://bundlephobia.com/result?p=package-name)
-[![npm version](https://img.shields.io/npm/v/package-name)](https://www.npmjs.com/package/package-name)
+[![CI status](https://img.shields.io/github/workflow/status/krmax44/rollup-plugin-computed/build/main)](https://github.com/krmax44/rollup-plugin-computed/actions)
+[![Code coverage](https://img.shields.io/codecov/c/github/krmax44/rollup-plugin-computed?token=token)](https://codecov.io/gh/krmax44/rollup-plugin-computed)
+[![npm version](https://img.shields.io/npm/v/rollup-plugin-computed)](https://www.npmjs.com/package/rollup-plugin-computed)
 
-Template for a tiny library.
+Oftentimes it's handy to compute some data at build time, like querying an API endpoint, so that it's faster for the client. With this Rollup/Vite plugin, it's really easy to do.
 
 ## Installation
 
 ```bash
-yarn add package-name
+yarn add rollup-plugin-computed
 # or using npm
-npm i package-name
+npm i rollup-plugin-computed
 ```
 
 ## Usage
 
 ```js
-itWorks();
+// rollup.config.js or vite.config.js
+
+import computed from 'rollup-plugin-computed';
+
+const computers = {
+	test() {
+		return { hello: 'world' };
+	},
+	image()
+};
+
+export default {
+	plugins: [computed({ computers })]
+};
+```
+
+You can access the computed data like this in your app:
+
+```js
+import data from 'test.computed';
+console.log(data);
+
+// { hello: 'world' }
 ```
