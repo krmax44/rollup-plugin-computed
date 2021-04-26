@@ -1,8 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`fileName respects custom file names 1`] = `
-"var test = {\\"it\\":\\"works\\"};
-
-export default test;
-"
-`;
