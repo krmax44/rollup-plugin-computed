@@ -1,7 +1,7 @@
 # rollup-plugin-computed
 
 [![CI status](https://img.shields.io/github/workflow/status/krmax44/rollup-plugin-computed/build/main)](https://github.com/krmax44/rollup-plugin-computed/actions)
-[![Code coverage](https://img.shields.io/codecov/c/github/krmax44/rollup-plugin-computed?token=token)](https://codecov.io/gh/krmax44/rollup-plugin-computed)
+[![Code coverage](https://img.shields.io/codecov/c/github/krmax44/rollup-plugin-computed?token=U8BJP3K9SH)](https://codecov.io/gh/krmax44/rollup-plugin-computed)
 [![npm version](https://img.shields.io/npm/v/rollup-plugin-computed)](https://www.npmjs.com/package/rollup-plugin-computed)
 
 Oftentimes it's handy to compute some data at build time, like querying an API endpoint, so that it's faster for the client. This plugin makes it really simple.
