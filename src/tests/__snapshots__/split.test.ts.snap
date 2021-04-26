@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`split doesn't split when asked to 1`] = `
+"var test = {\\"it\\":\\"works\\"};
+
+console.log(test);
+"
+`;
+
+exports[`split splits by default 1`] = `
+"var test = {\\"it\\":\\"works\\"};
+
+export default test;
+"
+`;
