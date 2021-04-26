@@ -4,7 +4,7 @@
 [![Code coverage](https://img.shields.io/codecov/c/github/krmax44/rollup-plugin-computed?token=token)](https://codecov.io/gh/krmax44/rollup-plugin-computed)
 [![npm version](https://img.shields.io/npm/v/rollup-plugin-computed)](https://www.npmjs.com/package/rollup-plugin-computed)
 
-Oftentimes it's handy to compute some data at build time, like querying an API endpoint, so that it's faster for the client. With this Rollup/Vite plugin, it's really easy to do.
+Oftentimes it's handy to compute some data at build time, like querying an API endpoint, so that it's faster for the client. This plugin makes it really simple.
 
 ## Installation
 
@@ -25,7 +25,17 @@ const computers = {
 	test() {
 		return { hello: 'world' };
 	},
-	image()
+	image: {
+		// bundle file, even though nothing in the app imports it
+		alwaysBuild: true,
+		type: 'asset', // chunk by default
+		fileExt: 'svg', // required for assets
+		// will be saved to dist/image.svg (rollup applies image-hash.svg by default)
+		fileName: 'image.svg',
+		fn() {
+			return '<svg>...</svg>';
+		}
+	}
 };
 
 export default {
