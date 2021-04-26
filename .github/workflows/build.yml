@@ -16,12 +16,12 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - run: yarn install
+      - name: Build
+        run: yarn build
       - name: Lint
         run: yarn lint
       - name: Test types
         run: yarn test:types
-      - name: Build
-        run: yarn build
       - name: Run tests
         run: yarn test --coverage
       - uses: codecov/codecov-action@v1
