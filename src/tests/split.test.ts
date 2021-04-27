@@ -2,7 +2,7 @@ import type { Computers } from '..';
 import { roll } from './utils';
 
 describe('split', () => {
-	it('splits by default', async () => {
+	it("doesn't split by default", async () => {
 		expect.assertions(2);
 
 		const computers: Computers = {
@@ -12,18 +12,18 @@ describe('split', () => {
 		};
 
 		const output = await roll('basic.js', computers);
-		const file: any = output.find(c => c.fileName === 'test.js');
+		const file: any = output.find(c => c.fileName === 'basic.js');
 
-		expect(output.length).toBe(2);
+		expect(output.length).toBe(1);
 		expect(file.code).toMatchSnapshot();
 	});
 
-	it("doesn't split when asked to", async () => {
+	it('splits when asked to', async () => {
 		expect.assertions(2);
 
 		const computers: Computers = {
 			test: {
-				split: false,
+				split: true,
 				fn() {
 					return { it: 'works' };
 				}
@@ -31,9 +31,9 @@ describe('split', () => {
 		};
 
 		const output = await roll('basic.js', computers);
-		const file: any = output.find(c => c.fileName === 'basic.js');
+		const file: any = output.find(c => c.fileName === 'test.js');
 
-		expect(output.length).toBe(1);
+		expect(output.length).toBe(2);
 		expect(file.code).toMatchSnapshot();
 	});
 });

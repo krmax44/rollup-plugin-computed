@@ -9,8 +9,11 @@ describe('serializer', () => {
 		expect.assertions(2);
 
 		const computers: Computers = {
-			test() {
-				return obj;
+			test: {
+				split: true,
+				fn() {
+					return obj;
+				}
 			}
 		};
 
@@ -29,6 +32,7 @@ export default test;
 
 		const computers: Computers = {
 			test: {
+				split: true,
 				serializer: false,
 				fn() {
 					return string;
@@ -48,6 +52,7 @@ export default test;
 
 		const computers: Computers = {
 			test: {
+				split: true,
 				serializer: input => input[0],
 				fn() {
 					return [string];

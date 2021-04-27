@@ -1,22 +1,29 @@
 import { name } from '../package.json';
 import type { Plugin as VitePlugin } from 'vite';
 import { PluginContext } from 'rollup';
-import { contentType as getContentType } from 'mime-types';
-import Computer from './Computer';
-import type { ComputerObj } from './Computer';
+import type { ComputerSetup, ComputerFn } from './Computer';
+import { AssetComputer } from './AssetComputer';
+import { ChunkComputer } from './ChunkComputer';
 
-type ComputerFn = (this: PluginContext) => any | Promise<any>;
-
-export type Computers = Record<string, ComputerFn | ComputerObj>;
-interface Options {
+export type Computers = Record<string, ComputerFn | ComputerSetup>;
+export interface Options {
 	computers: Computers;
 }
 
 export default function computed(options: Options): VitePlugin {
 	const computers = Object.keys(options.computers).reduce((obj, key) => {
-		obj[key] = Computer.normalize(options.computers[key], key);
+		const setup = options.computers[key];
+
+		if (typeof setup === 'function') {
+			obj[key] = new ChunkComputer(key, { fn: setup });
+		} else if (setup.type === 'asset') {
+			obj[key] = new AssetComputer(key, setup);
+		} else {
+			obj[key] = new ChunkComputer(key, setup);
+		}
+
 		return obj;
-	}, <Record<string, Computer>>{});
+	}, <Record<string, AssetComputer | ChunkComputer>>{});
 
 	let isVite = false;
 	let rollup: PluginContext;
@@ -34,31 +41,15 @@ export default function computed(options: Options): VitePlugin {
 			const computer = computers[name];
 			if (!computer) return null;
 
-			const type = computer.type ?? 'chunk';
+			const env = { watchMode, isVite };
 
-			// save as file
-
-			let data: any;
-			if (type === 'asset') {
-				if (!isVite) {
-					const handle = await computer.emit(this);
-					data = `import.meta.ROLLUP_FILE_URL_${handle}`;
-				} else {
-					data = `'/@computed/${name}'`;
-				}
-
-				return `export default ${data};`;
-			} else if (computer.split && !watchMode) {
-				computer.emit(this);
-			}
-
-			return computer.serialize(this);
+			return computer.load(rollup, env);
 		},
 		buildStart() {
 			if (isVite) return;
 
 			for (const computer of Object.values(computers)) {
-				if (computer.alwaysBuild && computer.type === 'asset') {
+				if (computer instanceof AssetComputer && computer.options.alwaysBuild) {
 					computer.emit(this);
 				}
 			}
@@ -70,22 +61,12 @@ export default function computed(options: Options): VitePlugin {
 				const [, name] = /\/@computed\/(.+)/.exec(req.url ?? '') ?? [];
 				const computer = computers[name];
 
-				if (name && computer) {
-					const { fileExt } = computer;
-					if (!fileExt)
-						return console.error(`No fileExt specified for ${name}.`);
-
-					const contentType = getContentType(fileExt);
-					if (!contentType) return console.error(`Unknown fileExt ${fileExt}`);
-
-					res.setHeader('Content-Type', contentType);
-					res.end(await computer.get(rollup));
-				} else {
-					next();
+				if (name && computer && computer instanceof AssetComputer) {
+					return computer.serve(rollup, req, res);
 				}
+
+				next();
 			});
 		}
 	};
 }
-
-export type { Computer, ComputerObj };

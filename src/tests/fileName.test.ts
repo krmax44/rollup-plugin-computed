@@ -7,6 +7,7 @@ describe('fileName', () => {
 
 		const computers: Computers = {
 			test: {
+				split: true,
 				fileName: 'bar.js',
 				fn() {
 					return { it: 'works' };
