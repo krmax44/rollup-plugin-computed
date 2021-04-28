@@ -9,9 +9,9 @@ Oftentimes it's handy to compute some data at build time, like querying an API e
 ## Installation
 
 ```bash
-yarn add rollup-plugin-computed
+yarn add -D rollup-plugin-computed
 # or using npm
-npm i rollup-plugin-computed
+npm i -D rollup-plugin-computed
 ```
 
 ## Usage
