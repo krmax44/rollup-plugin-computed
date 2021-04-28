@@ -72,6 +72,9 @@ export default test;
 	});
 
 	it('handles collections', async () => {
+		// clear start
+		await fs.rm(outDir, { recursive: true, force: true });
+
 		expect.assertions(5);
 
 		const computers: ComputerSetups = {
@@ -108,9 +111,5 @@ export default test;
 		expect(await collection.first()).toBe(1);
 		expect(await collection.second()).toBe(2);
 		expect(await collection.third()).toBe(3);
-	});
-
-	beforeAll(async () => {
-		await fs.rm(outDir, { recursive: true });
 	});
 });
