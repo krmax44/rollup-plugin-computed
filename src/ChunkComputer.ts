@@ -13,7 +13,11 @@ export interface ChunkSetup extends BaseSetup {
 	 * You can also provide a custom serializer function.
 	 * @default json
 	 */
-	serializer?: 'json' | false | ((computerFnOutput: any) => string);
+	serializer?:
+		| 'json'
+		| 'json-collection'
+		| false
+		| ((computerFnOutput: any) => string);
 
 	/**
 	 * Split the computed data into a seperate chunk.
@@ -56,6 +60,31 @@ export class ChunkComputer extends Computer {
 
 		if (serializer === 'json') {
 			return `export default ${JSON.stringify(computed)};`;
+		} else if (serializer === 'json-collection') {
+			const singles = Object.entries(computed as Record<string, any>).map(
+				([key, value]) => {
+					const name = `${this.name}|${key}`;
+					const fn = () => value;
+
+					const computer = new ChunkComputer(
+						name,
+						{ fn, split: true },
+						this.manager
+					);
+					if (!this.manager.viteWatchMode) computer.emit();
+
+					this.manager.computers.set(name, computer);
+
+					return [key, `${name}.computed`].map(v => JSON.stringify(v));
+				}
+			);
+
+			return `export default {
+				${singles.map(
+					([key, handle]) =>
+						`${key}: async () => (await import(${handle})).default`
+				)}
+			};`;
 		} else if (typeof serializer === 'function') {
 			return serializer(computed);
 		} else {

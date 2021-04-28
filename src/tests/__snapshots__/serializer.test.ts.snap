@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`serializer handles collections 1`] = `
+"'use strict';
+
+function _interopNamespaceDefaultOnly(e) {
+	return Object.freeze({__proto__: null, 'default': e});
+}
+
+var test = {
+				\\"first\\": async () => (await Promise.resolve().then(function () { return /*#__PURE__*/_interopNamespaceDefaultOnly(require('./test|first.js')); })).default,\\"second\\": async () => (await Promise.resolve().then(function () { return /*#__PURE__*/_interopNamespaceDefaultOnly(require('./test|second.js')); })).default,\\"third\\": async () => (await Promise.resolve().then(function () { return /*#__PURE__*/_interopNamespaceDefaultOnly(require('./test|third.js')); })).default
+			};
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+function jsonCollection () {
+	return test;
+}
+
+module.exports = jsonCollection;
+"
+`;

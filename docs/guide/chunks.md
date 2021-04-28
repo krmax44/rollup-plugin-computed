@@ -34,7 +34,11 @@ The computer function. It will be executed at build-time (never in the browser) 
 
 In our computer function, we pass back a string. To import it though, we need to return an ES module. The serializer takes care of transforming our returned data to ESM. By default, it is set to `json`, which will `JSON.stringify` the data and set that as the default export.
 
-You can disable serialization by passing `false`, or even provide a custom serializer:
+You can disable serialization by passing `false`.
+
+### Custom serializers
+
+You can define a custom serializer as such:
 
 ```js
 const computers = {
@@ -44,6 +48,9 @@ const computers = {
         const text = '${input}';
         export { text };
       `;
+		},
+		fn() {
+			return 'it works!';
 		}
 	}
 };
@@ -60,6 +67,34 @@ And can be imported as follows:
 
 ```js
 import { text } from 'example.computed';
+```
+
+### JSON collection
+
+There is also another serializer built in called `json-collection`. Sometimes it's handy to return not just one chunk, but multiple ones at a time - for example when returning a set of blog posts. Yet, the client might only need some of these.
+
+When setting `serializer` to `json-collection`, you can return an object like this:
+
+```js
+{
+	serializer: 'json-collection',
+	fn() {
+		return {
+			firstPost: 'Hello!',
+			secondPost: 'My fingers hurt from writing'
+		};
+	}
+}
+```
+
+In your app, you can then load each "post" on-demand:
+
+```js
+import posts from 'example.computed';
+
+// let's get the first post
+const firstPost = await posts.firstPost();
+console.log(firstPost); // --> Hello!
 ```
 
 ## `split?`

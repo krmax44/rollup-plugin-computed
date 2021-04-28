@@ -15,7 +15,7 @@ describe('fileName', () => {
 			}
 		};
 
-		const output = await roll('basic.js', computers, false);
+		const output = await roll('basic.js', computers, { noHash: true });
 		const file: any = output.find(c => c.fileName === 'bar.js');
 
 		expect(output.length).toBe(2);
