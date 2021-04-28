@@ -9,9 +9,9 @@ For simple usage, passing an object of functions to the plugin is adequate. Some
 To specify options, you can register computers like this:
 
 ```ts
-import type { Computers } from 'rollup-plugin-computed';
+import type { ComputerSetups } from 'rollup-plugin-computed';
 
-const computers: Computers = {
+const computers: ComputerSetups = {
 	example: {
 		// options go here
 		serializer: 'json',

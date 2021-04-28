@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
-import computed, { Computers } from '..';
+import computed, { ComputerSetups } from '..';
 
-const computers: Computers = {
+const computers: ComputerSetups = {
 	test: {
 		split: true,
 		fn() {

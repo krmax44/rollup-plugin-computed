@@ -7,9 +7,9 @@ title: Assets
 So far, we've only taken a look on Chunks, which is great for most kinds of data that your app would consume. But what about assets, like images? That's easy as well:
 
 ```ts
-import type { Computers } from 'rollup-plugin-computed';
+import type { ComputerSetups } from 'rollup-plugin-computed';
 
-const computers: Computers = {
+const computers: ComputerSetups = {
 	example: {
 		type: 'asset',
 		fileExt: 'svg',
