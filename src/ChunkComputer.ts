@@ -1,6 +1,6 @@
-import { PluginContext } from 'rollup';
 import { Computer } from './Computer';
 import type { BaseSetup, ComputerFn } from './Computer';
+import Manager from './Manager';
 
 export interface ChunkSetup extends BaseSetup {
 	type?: 'chunk';
@@ -27,8 +27,12 @@ export type ChunkSetups = Record<string, ChunkSetup | ComputerFn>;
 export class ChunkComputer extends Computer {
 	public options: ChunkSetup;
 
-	constructor(public name: string, options: ChunkSetup) {
-		super(name, options);
+	constructor(
+		public name: string,
+		options: ChunkSetup,
+		public manager: Manager
+	) {
+		super(name, options, manager);
 
 		this.options = {
 			serializer: 'json',
@@ -37,11 +41,18 @@ export class ChunkComputer extends Computer {
 		};
 	}
 
-	public async load(rollup: PluginContext): Promise<any> {
-		const { serializer, split } = this.options;
-		const computed = await this.get(rollup);
+	public async load(): Promise<string> {
+		const { split } = this.options;
+		const computed = await this.get();
 
-		if (split) this.emit(rollup);
+		if (split) this.emit();
+
+		return this.serialize(computed);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	public serialize(computed: any): string {
+		const { serializer } = this.options;
 
 		if (serializer === 'json') {
 			return `export default ${JSON.stringify(computed)};`;
@@ -52,25 +63,13 @@ export class ChunkComputer extends Computer {
 		}
 	}
 
-	public async emit(rollup: PluginContext): Promise<string> {
+	public async emit(): Promise<string> {
 		const { id, name } = this;
-		return rollup.emitFile({
+		return this.manager.rollup.emitFile({
 			type: 'chunk',
 			id,
 			name,
 			fileName: this.options.fileName
 		});
-	}
-
-	static fromSetup(setups: ChunkSetups): ChunkComputers {
-		return Object.keys(setups).reduce((obj, key) => {
-			const setup = setups[key];
-			obj[key] =
-				typeof setup === 'function'
-					? new ChunkComputer(key, { fn: setup })
-					: new ChunkComputer(key, setup);
-
-			return obj;
-		}, <ChunkComputers>{});
 	}
 }

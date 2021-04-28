@@ -1,11 +1,11 @@
-import type { Computers } from '..';
+import type { ComputerSetups } from '..';
 import { roll } from './utils';
 
 describe('alwaysBuild', () => {
 	it('force builds computes', async () => {
 		expect.assertions(2);
 
-		const computers: Computers = {
+		const computers: ComputerSetups = {
 			test: {
 				alwaysBuild: true,
 				type: 'asset',

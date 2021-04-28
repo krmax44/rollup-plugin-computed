@@ -1,11 +1,11 @@
-import type { Computers } from '..';
+import type { ComputerSetups } from '..';
 import { roll } from './utils';
 
 describe('fileName', () => {
 	it('respects custom file names', async () => {
 		expect.assertions(2);
 
-		const computers: Computers = {
+		const computers: ComputerSetups = {
 			test: {
 				split: true,
 				fileName: 'bar.js',

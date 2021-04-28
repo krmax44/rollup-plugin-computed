@@ -1,11 +1,11 @@
-import type { Computers } from '..';
+import type { ComputerSetups } from '..';
 import { roll } from './utils';
 
 describe('split', () => {
 	it("doesn't split by default", async () => {
 		expect.assertions(2);
 
-		const computers: Computers = {
+		const computers: ComputerSetups = {
 			test() {
 				return { it: 'works' };
 			}
@@ -21,7 +21,7 @@ describe('split', () => {
 	it('splits when asked to', async () => {
 		expect.assertions(2);
 
-		const computers: Computers = {
+		const computers: ComputerSetups = {
 			test: {
 				split: true,
 				fn() {

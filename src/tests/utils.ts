@@ -1,10 +1,10 @@
 import path from 'path';
 import { rollup, RollupOutput } from 'rollup';
-import computed, { Computers } from '..';
+import computed, { ComputerSetups } from '..';
 
 export async function roll(
 	input: string,
-	computers: Computers,
+	computers: ComputerSetups,
 	noHash = true
 ): Promise<RollupOutput['output']> {
 	const bundler = await rollup({

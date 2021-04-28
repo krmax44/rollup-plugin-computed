@@ -1,8 +1,11 @@
 import type { PluginContext } from 'rollup';
 import type { AssetSetup } from './AssetComputer';
 import type { ChunkSetup } from './ChunkComputer';
+import Manager from './Manager';
 
 export type ComputerFn = (this: PluginContext) => any | Promise<any>;
+export type ComputerSetup = ChunkSetup | AssetSetup;
+export type ComputerSetups = Record<string, ComputerFn | ComputerSetup>;
 
 export interface BaseSetup {
 	/**
@@ -16,22 +19,19 @@ export interface BaseSetup {
 	fileName?: string;
 }
 
-export type ComputerSetup = ChunkSetup | AssetSetup;
-
-export interface Env {
-	isVite: boolean;
-	watchMode: boolean;
-}
-
 export abstract class Computer {
 	public cache?: any | Buffer;
 
-	constructor(public name: string, public options: BaseSetup) {}
+	constructor(
+		public name: string,
+		public options: BaseSetup,
+		public manager: Manager
+	) {}
 
-	public async get(rollup: PluginContext): Promise<any> {
+	public async get(): Promise<any> {
 		if (this.cache) return this.cache;
 
-		return Promise.resolve(this.options.fn.apply(rollup));
+		return Promise.resolve(this.options.fn.apply(this.manager.rollup));
 	}
 
 	get id(): string {
