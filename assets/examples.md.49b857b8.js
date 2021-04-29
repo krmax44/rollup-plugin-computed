@@ -1,0 +1,1 @@
+import{o as t,c as e,a}from"./app.2dbd545e.js";const l='{"title":"Examples","description":"","frontmatter":{"title":"Examples"},"relativePath":"examples.md","lastUpdated":1619710947066}',r={},o=a("p",null,"foo",-1);r.render=function(a,l,r,p,s,d){return t(),e("div",null,[o])};export default r;export{l as __pageData};
