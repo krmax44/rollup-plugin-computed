@@ -1,7 +1,6 @@
 module.exports = {
 	title: 'computed 📂',
 	description: 'Compute data at build time.',
-	base: '/rollup-plugin-computed/',
 	themeConfig: {
 		repo: 'krmax44/rollup-plugin-computed',
 		docsDir: 'docs',
